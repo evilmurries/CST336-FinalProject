@@ -15,7 +15,7 @@ const tools = require("./tools.js");
 // Routes
 
 app.get("/", function(req, res) {
-  res.send("Hello World!");
+  res.render("index");
 }); // Main Route
 
 // Local Server Listener
