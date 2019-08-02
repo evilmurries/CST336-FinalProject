@@ -1,0 +1,35 @@
+body{
+  background-color:#ebe0d1;
+  text color: black;
+  text-align: center;
+}
+
+h1 {
+  text-align:center;
+  font-family: 'Roboto Condensed', sans-serif;
+  text-shadow: 2px 2px #4e8bfc;
+  font-size: 4em;
+  margin-bottom 0px;
+  color:grey;
+}
+
+p{
+  text-align:center;
+  font-size: 1.2em;
+  font-family: 'Roboto Condensed', sans-serif;  
+}
+
+* {
+  box-sizing: border-box;
+}
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
