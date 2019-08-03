@@ -1,9 +1,8 @@
 <% include partials/header.ejs %>
-</head>
-  <body>
-    
     <main>
       <p>Welcome to Golden State Adoption Center, we are a non-profit that wants to place you with the animal that is a pefect fit for you and them.</p>
+    
+      
     
 <div class="row">
   <div class="column">
@@ -13,15 +12,24 @@
   <div class="column">
     <img src="img/indexpuppy.jpg" alt="dog" style="width:100%"> <!--Photo by Victor Grabarczyk on Unsplash-->
   </div>
+  
   <div class="column">
     <img src="img/newindexbunny.jpg" alt="bunny" style="width:100%"> <!--Photo by Waranya Mooldee on Unsplash-->
   </div>
-</div>
-     
+     </div>
+  
+    
+   <form  action="/adopt" method="GET">
+  <button class="button" id="submitButton" type="button">Adopt</button>
+    </form>
+
+       <div id= "admin-button">
+             <form  action="/login" method="GET">
+            <button class="admin-button" id="adbutton" type="button">Admin</button>
+            </form>
+            </div>
     </main>
     
-  </body>
   
-
 
 <% include partials/footer.ejs %>

@@ -4,7 +4,7 @@ body{
   text-align: center;
 }
 
-h1 {
+h1, h2{
   text-align:center;
   font-family: 'Roboto Condensed', sans-serif;
   text-shadow: 2px 2px #4e8bfc;
@@ -32,4 +32,62 @@ p{
   content: "";
   clear: both;
   display: table;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  padding: 8px;
+  background-color: #dddddd;
+}
+
+.button {
+  background-color:#99c1ff ;
+  border: none;
+  color: rgb(255,225,230);
+  padding: 17px 32px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  margin: 6px 2px;
+  cursor: pointer;
+}
+
+img.avatar {
+  width: 10%;
+  border-radius: 50%;
+}
+
+.container {
+  padding: 16px;
+}
+
+
+input[type=text], input[type=password] {
+  width: 40%;
+  padding: 12px 15px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 5px solid #ccc;
+  box-sizing: border-box;
+}
+.admin-button{
+  background-color:#99c1ff ;
+  color: rgb(255,225,230);
+  padding: 5px 5px;
+  text-align: center;
+  display: inline-block;
+  font-size: 10px;
+  margin: 6px 2px;
+  cursor: pointer;
 }
