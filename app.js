@@ -36,8 +36,8 @@ app.get("/api/getimage", function(req, res) {
   var conn = tools.createConnection();
   //var name = "Charles"
   var sql = "SELECT image FROM pets WHERE pet_name = ?";
-  //var sqlParams = [req.query.keyword];
-  var sqlParams = 'Charles';
+  var sqlParams = req.query.pet_name;
+  //var sqlParams = 'Charles';
   conn.query(sql, sqlParams, function(err, result) {
   //conn.query(sql, function(err, result) {
     if (err) throw err;

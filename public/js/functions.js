@@ -5,18 +5,20 @@ $(document).ready(function() {
 
 
   //$(".button").on("click", function() {
-    var image = document.getElementById("img/adoptions/charles.jpg");
+    
   
   
     $.ajax({
       method: "get",
       url: "/api/getimage",
       data: {
-        "image": image,
+        
+        "pet_name": 'Donut', //calling one image
       },
-      success: function(status) {
+      success: function(result, status) {
+        
         $("#animalResult").html("");
-        $("#animalResult").append("<img id='image' src='" + image + "' width='200' height='200'/>");
+        $("#animalResult").append("<img id='image' src='" + result[0].image + "' width='200' height='200'/>");
       }
     }) //ajax
   //});
