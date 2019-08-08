@@ -11,12 +11,14 @@ DROP TABLE IF EXISTS animals;
 
 -- Create Tables
 
+-- Types of pets for adoption
 CREATE TABLE animals (
 	id INT  AUTO_INCREMENT,
     animal VARCHAR(100),
     PRIMARY KEY (id)
 );
 
+-- Pets available for adoption
 CREATE TABLE pets (
   id INT PRIMARY KEY AUTO_INCREMENT,
   pet_name VARCHAR(50),
@@ -28,11 +30,24 @@ CREATE TABLE pets (
   CONSTRAINT animal_type_fk FOREIGN KEY (animal_type) REFERENCES animals(id)
 );
 
+-- Admin users
 CREATE TABLE administration (
   id INT PRIMARY KEY AUTO_INCREMENT,
   user_name VARCHAR(50) NOT NULL,
   user_password VARCHAR(25) NOT NULL,
   real_name VARCHAR(25) NOT NULL
+);
+
+-- Pets successfully adopted
+CREATE TABLE adopted_pets (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  pet_name VARCHAR(50),
+  animal_type INT,
+  adoption_fee DECIMAL(8, 2),
+  location VARCHAR(250),
+  image VARCHAR(200),
+  description VARCHAR(500),
+  CONSTRAINT animal_type_fk FOREIGN KEY (animal_type) REFERENCES animals(id)
 );
 
 -- Insert Data | Everyone update your values here
