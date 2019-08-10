@@ -8,22 +8,24 @@ $(document).ready(function() {
     
   
   
+   $(".petLink").on("click", function() {
     $.ajax({
       method: "get",
       url: "/api/getimage",
       data: {
-        
-        "pet_name": 'Donut', //calling one image
+
+        "animal_type" : $(this).text().trim(),
       },
-      success: function(result, status) {
+      success: function(rows, status) {
         
         $("#animalResult").html("");
-        $("#cartContainer").html("");
-        $("#animalResult").append("<img id='image' src='" + result[0].image + "' width='200' height='200'/>");
-        $("#cartContainer").append('<i class="fas fa-shopping-cart"></i>');
-        // Switch to <i class="fas fa-cart-arrow-down"></i> when clicked on
+        rows.forEach(function(row) {
+        $("#animalResult").append("<img id='image' src='" + row.image + "' width='200' height='200'/>");
+
+        })
       }
     }) //ajax
+  }); //petLink
   //});
 }) //ready document
 

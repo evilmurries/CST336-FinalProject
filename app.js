@@ -28,9 +28,20 @@ app.get("/", function(req, res) {
 }); // Main Route
 
 app.get("/adopt", function(req, res) {
- // res.render("index", {"imageURLs": imageURLs});
-  res.render("adopt");
-  //res.render("adopt", {"image": image});
+
+  var conn = tools.createConnection();
+  let sql = "SELECT DISTINCT animal_type FROM pets ORDER BY animal_type";
+  //let sql = "SELECT animal from animals inner join pets on animals.id = pets.id";
+  let animals = req.query.animal_type;
+  
+
+  conn.query(sql, function(err, result){
+      if (err) throw err;
+     res.render("adopt", {"rows": result});
+      console.log(result);
+    //console.log(animals);
+    //console.log(image);
+    }); // query
 });// populates page of mysql images
 
 app.get("/login", function(req, res) {
@@ -50,19 +61,30 @@ app.get("/myAccount",isAuthenticated, function(req,res) {
   res.render("account");
 });
 
+
+app.get("/displayPets", async function(req, res) {
+  var conn = tools.createConnection();
+  let sql = "SELECT DISTINCT animal_type FROM pets ORDER BY animal_type";
+
+    conn.query(sql, function(err, result){
+      if (err) throw err;
+      res.render("adopt", {"rows": result, "image": image});//render on certain page.
+      console.log(result);
+    }); // query
+}); //display Pet Species
+
 app.get("/api/getimage", function(req, res) {
   var conn = tools.createConnection();
-  //var name = "Charles"
-  var sql = "SELECT image FROM pets WHERE pet_name = ?";
-  var sqlParams = req.query.pet_name;
-  //var sqlParams = 'Charles';
+  let sql = "SELECT image FROM pets WHERE animal_type = ?";
+  var sqlParams = req.query.animal_type; 
+  //var sqlParams = req.query.pet_name;
   conn.query(sql, sqlParams, function(err, result) {
-  //conn.query(sql, function(err, result) {
     if (err) throw err;
     console.log(result);
     res.send(result);
   }); //query
-}); // displayimage TEST
+});
+
 
 // POST routes
 
