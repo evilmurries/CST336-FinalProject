@@ -53,10 +53,6 @@ app.get("/logout", function(req, res) {
   res.redirect("/");
 }); //logout
 
-app.get("/admin", isAuthenticated, function(req, res) {
-  res.render("admin");
-}); //admin work page
-
 app.get("/myAccount",isAuthenticated, function(req,res) {
   res.render("account");
 });
@@ -87,6 +83,14 @@ app.get("/api/getimage", function(req, res) {
 
 
 // POST routes
+
+app.post("/admin", function(req, res) {
+  let username = req.body.username;
+  let password = req.body.password;
+  console.log("username:" + username);
+  console.log("password: " + password);
+  res.render("admin");
+}); //admin work page
 
 app.post("/", async function(req,res){
   let username = req.body.username;

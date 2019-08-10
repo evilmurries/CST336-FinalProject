@@ -1,26 +1,16 @@
 <% include partials/header.ejs %>
 
-    
     <main>
       <h2>Login Form</h2>
       
-   <form action="/admin">
+   <form action="/admin" method="POST">
      
-    <div class="container">
-    <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="Please Enter Username" name="usernamename" required>
-       
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Please Enter Password" name="psw" required>
-        
-      
-    <button class ="button" type="submit">Login</button>
-    <label>
-    </div>
-     
+      <label for="uname"><b>Username</b></label>
+      <input type="text" placeholder="Please Enter Username" name="username" required>
+      <label for="psw"><b>Password</b></label>
+      <input type="password" placeholder="Please Enter Password" name="password" required>
+      <input type="submit">Login</button>
+    </form>
     </main>
   
-  
-
-
 <% include partials/footer.ejs %>
