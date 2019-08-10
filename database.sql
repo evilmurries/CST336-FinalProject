@@ -7,6 +7,7 @@ SET @@auto_increment_increment=1;
 -- Drop Tables
 DROP TABLE IF EXISTS administration;
 DROP TABLE IF EXISTS pets;
+DROP TABLE IF EXISTS adopted_pets;
 DROP TABLE IF EXISTS animals;
 
 -- Create Tables
@@ -46,7 +47,7 @@ CREATE TABLE adopted_pets (
   location VARCHAR(250),
   image VARCHAR(200),
   description VARCHAR(500),
-  CONSTRAINT animal_type_fk FOREIGN KEY (animal_type) REFERENCES animals(id)
+  CONSTRAINT adopted_animal_type_fk FOREIGN KEY (animal_type) REFERENCES animals(id)
 );
 
 -- Insert Data | Everyone update your admin values here
@@ -72,10 +73,15 @@ INSERT into pets (pet_name, animal_type, adoption_fee, location, image, descript
 INSERT into pets (pet_name, animal_type, adoption_fee, location, image, description) VALUES ("Reginald", 1, 50.00, "Oakland", "img/adoptions/reginald.jpg", "Noble and loyal pal!");
 INSERT into pets (pet_name, animal_type, adoption_fee, location, image, description) VALUES ("Marcus", 1, 200.00, "Santa Clara", "img/adoptions/marcus.jpg", "Highly intelligent and precocious.");
 
--- 3 Cats
+-- 8 Cats
 INSERT into pets (pet_name, animal_type, adoption_fee, location, image, description) VALUES ("Donut", 2, 25.00, "San Jose", "img/adoptions/donut.jpg", "Small guy with a big attitude.");
 INSERT into pets (pet_name, animal_type, adoption_fee, location, image, description) VALUES ("Woody", 2, 50.00, "San Francisco", "img/adoptions/woody.jpg", "Snuggle Buddy.");
 INSERT into pets (pet_name, animal_type, adoption_fee, location, image, description) VALUES ("Mittens", 2, 200.00, "Santa Clara", "img/adoptions/mittens.jpg", "Cute troublemaker!");
+INSERT into pets (pet_name, animal_type, adoption_fee, location, image, description) VALUES ("Francis", 2, 100.00, "Portland", "img/adoptions/francis.jpg", "Always sleepy!");
+INSERT into pets (pet_name, animal_type, adoption_fee, location, image, description) VALUES ("Jerry", 2, 25.00, "San Jose", "img/adoptions/jerry.jpg", "Favorite food is jalapeno poppers.");
+INSERT into pets (pet_name, animal_type, adoption_fee, location, image, description) VALUES ("Prudence", 2, 50.00, "San Francisco", "img/adoptions/prudence.jpg", "Snuggle Buddy.");
+INSERT into pets (pet_name, animal_type, adoption_fee, location, image, description) VALUES ("Spots", 2, 25.00, "San Jose", "img/adoptions/spots.jpg", "Very large.");
+INSERT into pets (pet_name, animal_type, adoption_fee, location, image, description) VALUES ("Tracy", 2, 50.00, "San Francisco", "img/adoptions/tracy.jpg", "Big Jay Z fan.");
 
 -- 2 Horses
 INSERT into pets (pet_name, animal_type, adoption_fee, location, image, description) VALUES ("Annie", 3, 50.00, "Menlo Park", "img/adoptions/annie.jpg", "Loves carrots.");
