@@ -1,12 +1,10 @@
 <% include partials/header.ejs %>
 
     <main>
+        <form <li><a href="/">
+  <button class="button" id="submitButton" type="button">Home</button>
+    </form>
       <p>Here is our amazings lists of animals that we have at Golden State Adoption, we have added a description of each animal so you can get to know them.</p> 
-      
-       <!--Whatever is between row[  ] has to be sql name-->
-      <% rows.forEach(function(row) { %>
-        <a class="petLink"> <%= row['animal_type'] %> </a>
-    <% }) %>
       
       <div id="animalResult">
 
