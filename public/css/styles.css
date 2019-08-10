@@ -7,10 +7,9 @@ body{
 h1, h2{
   text-align:center;
   font-family: 'Roboto Condensed', sans-serif;
-  text-shadow: 2px 2px #4e8bfc;
   font-size: 4em;
   margin-bottom 0px;
-  color:grey;
+  color:#335763;
 }
 
 p{
@@ -52,14 +51,14 @@ li a {
 }
 
 .button {
-  background-color:#99c1ff ;
+  background-color:#335763 ;
   border: none;
-  color: rgb(255,225,230);
-  padding: 17px 32px;
+  color: orange;
+  padding: 10px 25px;
   text-align: center;
   display: inline-block;
   font-size: 16px;
-  margin: 6px 2px;
+  margin: 8px 2px;
   cursor: pointer;
 }
 
@@ -82,12 +81,12 @@ input[type=text], input[type=password] {
   box-sizing: border-box;
 }
 .admin-button{
-  background-color:#99c1ff ;
-  color: rgb(255,225,230);
-  padding: 5px 5px;
+  background-color:#335763 ;
+  color: orange;
+  padding: 10px 25px;
   text-align: center;
   display: inline-block;
-  font-size: 10px;
+  font-size: 16px;
   margin: 6px 2px;
   cursor: pointer;
 }
