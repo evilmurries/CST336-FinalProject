@@ -34,7 +34,7 @@ CREATE TABLE pets (
 CREATE TABLE administration (
   id INT PRIMARY KEY AUTO_INCREMENT,
   user_name VARCHAR(50) NOT NULL,
-  user_password VARCHAR(25) NOT NULL,
+  user_password VARCHAR(100) NOT NULL,
   real_name VARCHAR(25) NOT NULL
 );
 
@@ -52,10 +52,10 @@ CREATE TABLE adopted_pets (
 
 -- Insert Data | Everyone update your admin values here
 -- 4 admin users
-INSERT INTO administration (user_name, user_password, real_name) VALUES ("cpiwarski", "piwarski", "Chris");
-INSERT INTO administration (user_name, user_password, real_name) VALUES ("mmariscal", "mariscal", "Mark");
-INSERT INTO administration (user_name, user_password, real_name) VALUES ("warobleh", "robleh", "Wais");
-INSERT INTO administration (user_name, user_password, real_name) VALUES ("jseals", "seals", "John");
+INSERT INTO administration (user_name, user_password, real_name) VALUES ("cpiwarski", "$2a$10$egYVqF6xWNkZACKApWpY0eVZzFIfHcdHym6153TlNEyKegZ6oLpsa", "Chris");
+INSERT INTO administration (user_name, user_password, real_name) VALUES ("mmariscal", "$2a$10$URJWRSUvCCL5g8CGsbtl0uAUrMSIeOu3rFVt9w9S9NRlsLVdkAFEm", "Mark");
+INSERT INTO administration (user_name, user_password, real_name) VALUES ("warobleh", "$2a$10$fi6CMTE4D3Qa/H./SNT78Os5y.mwgHM0kOGkmOa/Ttl2.s7F2SYBa", "Wais");
+INSERT INTO administration (user_name, user_password, real_name) VALUES ("jseals", "$2a$10$HwtCch2kloYVmOd6fjLdwOkwdsjNIBkpMQaGsX0267Ez6yWt6uGOK", "John");
  
  -- 7 animals
 INSERT INTO animals (animal) VALUES ("dog");

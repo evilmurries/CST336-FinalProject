@@ -8,7 +8,7 @@ app.use(express.static("public"));
 // Other Dependencies
 const request = require("request");
 const mysql = require("mysql");
-const tools = require("./tools.js");
+const bcrypt = require("bcrypt");
 
 
 app.use(session({
@@ -29,7 +29,7 @@ app.get("/", function(req, res) {
 
 app.get("/adopt", function(req, res) {
 
-  var conn = tools.createConnection();
+  var conn = createDBConnection();
   let sql = "SELECT DISTINCT animal_type FROM pets ORDER BY animal_type";
   //let sql = "SELECT animal from animals inner join pets on animals.id = pets.id";
   let animals = req.query.animal_type;
@@ -59,7 +59,7 @@ app.get("/myAccount",isAuthenticated, function(req,res) {
 
 
 app.get("/displayPets", async function(req, res) {
-  var conn = tools.createConnection();
+  var conn = createDBConnection();
   let sql = "SELECT DISTINCT animal_type FROM pets ORDER BY animal_type";
 
     conn.query(sql, function(err, result){
@@ -70,7 +70,7 @@ app.get("/displayPets", async function(req, res) {
 }); //display Pet Species
 
 app.get("/api/getimage", function(req, res) {
-  var conn = tools.createConnection();
+  var conn = createDBConnection();
   let sql = "SELECT image FROM pets WHERE animal_type = ?";
   var sqlParams = req.query.animal_type; 
   //var sqlParams = req.query.pet_name;
@@ -84,41 +84,33 @@ app.get("/api/getimage", function(req, res) {
 
 // POST routes
 
-app.post("/admin", function(req, res) {
+app.post("/admin", async function(req, res) {
   let username = req.body.username;
   let password = req.body.password;
-  console.log("username:" + username);
-  console.log("password: " + password);
-  res.render("admin");
-}); //admin work page
-
-app.post("/", async function(req,res){
-  let username = req.body.username;
-  let password = req.body.password;
- 
-  let result = await checkUsername(username);
   
-  console.dir(result);
-  let hashedPwd="";
+  let result = await checkUsername(username);
+  //console.dir(result);
+  
+  var dbPassword="";
   
   if(result.length > 0) {
-    hashedPwd = result[0].Password;
+    dbPassword= result[0].user_password;
   }
   
-  let passwordMatch = await checkPassword(password,hashedPwd);
-  console.log("passwordMatch:" + passwordMatch);
+  let passwordMatch = await checkPassword(password, dbPassword)
   
-  if(passwordMatch){
+  if (passwordMatch){
     console.log("passwordMatch detected");
     req.session.authenticated = true;
-    res.render("welcome");
+    res.render("admin");
   } else {
     console.log("passwordMatch NOT detected");
-    res.render("index",{"loginError":true});
+    req.session.authenticated = false;
+    res.render("index", {"loginError":true});
   }
-  
-});//end of app.post
+}); //admin work page
 
+//
 app.post("/generateReport", isAuthenticated, function (req, res) {
    var sql = "SELECT AVG(adoption_fee) AS avg, MIN(adoption_fee) as min, MAX(adoption_fee) as max FROM pets"
    var avg; 
@@ -255,16 +247,7 @@ function getAnimalTypeCount(){
     //});//promise
 }
 
-function createDBConnection() {
-  var conn = mysql.createConnection({
-    host:"localhost",
-    user: "root",
-    password:"",
-    database:"authentication"
-  });
-  return conn;
-}
-
+// Middleware function that keeps a user session active
 function isAuthenticated(req, res, next) {
   if(!req.session.authenticated) {
     res.redirect('/');
@@ -273,13 +256,13 @@ function isAuthenticated(req, res, next) {
   }
 }
 
-function checkPassword(password, hashedValue) {
-  return new Promise( function(resolve, reject){
-    bcrypt.compare(password, hashedValue, function(err, result) {
-      console.log("Result: " + result);
+// Checks the provided password against the database password for authentication
+function checkPassword(password, dbPassword) {
+  return new Promise( function(resolve, reject) {
+    bcrypt.compare(password, dbPassword, function(err, result) {
       resolve(result);
-    });
-  });
+    }); //bcrypt
+  }); // promise
 }
 
 /**
@@ -289,16 +272,27 @@ function checkPassword(password, hashedValue) {
 * @return {array of objects}
 */
 function checkUsername(username){
-  let sql = "SELECT * FROM users WHERE username = ? ";
+  let sql = "SELECT * FROM administration WHERE user_name = ? ";
   return new Promise(function(resolve,reject){
     let conn = createDBConnection();
-    conn.connect(function(err) {
-      if(err) throw err;
+    conn.getConnection(function(err) {
+      if (err) throw err;
       conn.query(sql, [username], function(err,rows,fields) {
         if (err) throw err;
-        console.log("Rows found: " + rows.length);
         resolve(rows);
       });//query
     });//connect
   });//promise
+}
+
+// Create a connection to the database server
+function createDBConnection() {
+    var conn = mysql.createPool({
+        connectionLimit: 10,
+        host: "us-cdbr-iron-east-02.cleardb.net",
+        user: "b966e7405b082e",
+        password: "e739afd6",
+        database: "heroku_d27a5db666d1cf0"
+    });
+    return conn;
 }
