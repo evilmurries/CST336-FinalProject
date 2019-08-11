@@ -1,4 +1,4 @@
-<% include partials/header.ejs %>
+ <% include partials/header.ejs %>
 
 <h1>Admin Functions:</h1>
   
@@ -26,6 +26,13 @@
         <form method="post" action="/deleteRecord">
           Pet name: <input type="text" style="width: 75px" name="pet_name">
             <button data-onclick="$.get('/deleteRecord', function(data){ console.log(data) });">Delete Record</button>
+          <div id="deleteSuccess">
+            <% if(typeof delSuccess != "undefined" && delSuccess) { %>
+              <p>
+              Record Successfully Deleted
+              </p>
+            <% } %>
+          </div>
         </form>
     
         <form method="post" action="/generateReport">

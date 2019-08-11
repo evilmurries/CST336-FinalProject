@@ -110,13 +110,19 @@ app.post("/admin", async function(req, res) {
   }
 }); //admin work page
 
+// Logs out an administrative user
+app.post("/logout", function (req, res) {
+  req.session.destroy();
+  res.redirect("/");
+}); // logout
+
 //
 app.post("/generateReport", isAuthenticated, function (req, res) {
    var sql = "SELECT AVG(adoption_fee) AS avg, MIN(adoption_fee) as min, MAX(adoption_fee) as max FROM pets"
    var avg; 
     var promise = new Promise(function (resolve, reject) {
         let conn = createDBConnection();
-        conn.connect(function (err) {
+        conn.getConnection(function (err) {
             if (err) throw err;
             conn.query(sql, [], function (err, rows, fields){//rows, fields) {
                 if (err) throw err;
@@ -131,7 +137,7 @@ app.post("/generateReport", isAuthenticated, function (req, res) {
                 for(var i = 0; i < results.length; i++){
                   results[i]["petname"] = animalIndexToName[i]
                 }
-                 res.render("welcome", {"avg" : avg, "min" : min, "max" : max,"results": results});    
+                 res.render("admin", {"avg" : avg, "min" : min, "max" : max,"results": results});    
                 });
               });
             });//query
@@ -149,7 +155,7 @@ app.post("/updateTable", isAuthenticated, function (req, res) {
     var sql = "UPDATE pets SET animal_type = ?, adoption_fee = ?, location = ?, image = ?, description = ? WHERE pet_name = ?" //adoption_fee, location, image, description VALUES(?,?,?,?,?,?) WHERE pet_name = ?"//"UPDATE pets(pet_name, animal_type, adoption_fee, location, image, description) VALUES(?,?,?,?,?,?) WHERE pet_name = ?";
     var promise = new Promise(function (resolve, reject) {
         let conn = createDBConnection();
-        conn.connect(function (err) {
+        conn.getConnection(function (err) {
             if (err) throw err;
             conn.query(sql, [animalType,adoptionFee, physicalLocation, imageurl, desc, petName], function (err, rows, fields) {
                 if (err) throw err;
@@ -173,7 +179,7 @@ app.post("/insertRecord", isAuthenticated, function (req, res) {
     var sql = "INSERT INTO pets(pet_name, animal_type, adoption_fee, location, image, description) VALUES(?,?,?,?,?,?)";
     var promise = new Promise(function (resolve, reject) {
         let conn = createDBConnection();
-        conn.connect(function (err) {
+        conn.getConnection(function (err) {
             if (err) throw err;
             conn.query(sql, [petName, animalType, adoptionFee, physicalLocation, imageurl, desc
                             ], function (err, rows, fields) {
@@ -195,14 +201,18 @@ app.post("/deleteRecord", isAuthenticated, function (req, res) {
 
     var promise = new Promise(function (resolve, reject) {
         let conn = createDBConnection();
-        conn.connect(function (err) {
+        conn.getConnection(function (err) {
             if (err) throw err;
             conn.query(sql, [petName], function (err, rows, fields) {
-                if (err) throw err;
-                console.log("Insert execution: ", rows, fields);
-                res.render("welcome", {
-                    sql: sql
-                });
+                if (err) { throw err }
+                else if (rows.affectedRows == 0) {
+                  res.render("admin", {delSuccess: false})
+                } else {
+                  console.log("Delete execution: ", rows, fields);
+                  res.render("admin", {
+                    sql: sql, delSuccess: true
+                  });
+                }
             });//query
         });//connect
     });//promise
@@ -235,7 +245,7 @@ function getAnimalTypeCount(){
     var sql = "SELECT COUNT(animal_type) as howmany, animal_type FROM pets GROUP BY animal_type"
     return new Promise(function (resolve, reject) {
         let conn = createDBConnection();
-        conn.connect(function (err) {
+        conn.getConnection(function (err) {
             if (err) throw err;
             conn.query(sql, [], function (err, rows, fields) {
                 if (err) throw err;
