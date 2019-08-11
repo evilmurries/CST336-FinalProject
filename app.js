@@ -168,25 +168,27 @@ app.post("/updateTable", isAuthenticated, function (req, res) {
     });//promise
 });
 
-/* Insert record route, user must fill in all fields */
+/* Insert new admin record, user must fill in all fields */
 app.post("/insertRecord", isAuthenticated, function (req, res) {
-    var petName = req.body.pet_name;
-    var animalType  = req.body.animal_type;
-    var adoptionFee = req.body.adoption_fee;
-    var physicalLocation = req.body.location;
-    var imageurl = req.body.imageURL;
-    var desc = req.body.description;
-    var sql = "INSERT INTO pets(pet_name, animal_type, adoption_fee, location, image, description) VALUES(?,?,?,?,?,?)";
+    var username = req.body.username;
+    var password  = req.body.password;
+    var realname = req.body.realname;
+    var sql = "INSERT INTO administration(user_name, user_password, real_name) VALUES(?,?,?)";
+    var sqlParams = [username, password, realname];
+  
+    if (username == "" || password == "" || realname == "") {
+      res.render("admin", {sql: sql, insertSuccess: false});
+    }
     var promise = new Promise(function (resolve, reject) {
         let conn = createDBConnection();
         conn.getConnection(function (err) {
             if (err) throw err;
-            conn.query(sql, [petName, animalType, adoptionFee, physicalLocation, imageurl, desc
-                            ], function (err, rows, fields) {
+            conn.query(sql, sqlParams, function (err, rows, fields) {
                 if (err) throw err;
+                console.dir(rows);
                 console.log("Insert execution: ", rows, fields);
-                res.render("welcome", {
-                    sql: sql
+                res.render("admin", {
+                    sql: sql, insertSuccess: true
                 });
             });//query
         });//connect
