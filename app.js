@@ -9,6 +9,7 @@ app.use(express.static("public"));
 const request = require("request");
 const mysql = require("mysql");
 const bcrypt = require("bcrypt");
+var petsData;
 
 
 app.use(session({
@@ -81,6 +82,20 @@ app.get("/api/getimage", function(req, res) {
   }); //query
 });
 
+// API for requesting all the pet names
+app.get("/api/petNames", function(req, res) {
+  var conn = createDBConnection();
+  let sql = "SELECT pet_name FROM pets"
+  
+  conn.query(sql, function(err, result) {
+    if (err) throw err;
+    console.log(result);
+    res.send(result);
+  }) // Query
+}); // API route
+        
+     
+
 
 // POST routes
 
@@ -102,7 +117,15 @@ app.post("/admin", async function(req, res) {
   if (passwordMatch){
     console.log("passwordMatch detected");
     req.session.authenticated = true;
-    res.render("admin");
+    
+    let conn = await createDBConnectionMultiple();
+    let sql = "SELECT pet_name FROM pets; SELECT id, animal FROM animals; SELECT DISTINCT adoption_fee  FROM pets ORDER BY adoption_fee; SELECT DISTINCT location FROM pets;"
+  
+    conn.query(sql, function(err, pet_result) {
+      if (err) throw err;
+      petsData = pet_result;
+      res.render("admin", {"pets": petsData});
+    })  
   } else {
     console.log("passwordMatch NOT detected");
     req.session.authenticated = false;
@@ -137,7 +160,7 @@ app.post("/generateReport", isAuthenticated, function (req, res) {
                 for(var i = 0; i < results.length; i++){
                   results[i]["petname"] = animalIndexToName[i]
                 }
-                 res.render("admin", {"avg" : avg, "min" : min, "max" : max,"results": results});    
+                 res.render("admin", {"avg" : avg, "min" : min, "max" : max,"results": results, "pets": petsData});    
                 });
               });
             });//query
@@ -147,22 +170,27 @@ app.post("/generateReport", isAuthenticated, function (req, res) {
 /* Update table route, user must fill in all fields */
 app.post("/updateTable", isAuthenticated, function (req, res) {
     var petName = req.body.pet_name;
-    var animalType  = req.body.animal_type;
-    var adoptionFee = req.body.adoption_fee;
+    var animalType  = parseInt(req.body.animal_type);
+    var adoptionFee = parseFloat(req.body.adoption_fee);
     var physicalLocation = req.body.location;
     var imageurl = req.body.imageURL;
     var desc = req.body.description;
-    var sql = "UPDATE pets SET animal_type = ?, adoption_fee = ?, location = ?, image = ?, description = ? WHERE pet_name = ?" //adoption_fee, location, image, description VALUES(?,?,?,?,?,?) WHERE pet_name = ?"//"UPDATE pets(pet_name, animal_type, adoption_fee, location, image, description) VALUES(?,?,?,?,?,?) WHERE pet_name = ?";
+    let sqlParams = [animalType, adoptionFee, physicalLocation, imageurl, desc, petName];
+  console.log(sqlParams);
+    var sql = "UPDATE pets SET animal_type = ?, adoption_fee = ?, location = ?, image = ?, description = ? WHERE pet_name = ?";
     var promise = new Promise(function (resolve, reject) {
         let conn = createDBConnection();
         conn.getConnection(function (err) {
             if (err) throw err;
-            conn.query(sql, [animalType,adoptionFee, physicalLocation, imageurl, desc, petName], function (err, rows, fields) {
+            conn.query(sql, sqlParams, function (err, rows, fields) {
                 if (err) throw err;
+              if (rows.affectedRows == 0) {
                 console.log("Update execution: ", rows, fields);
-                res.render("welcome", {
-                    sql: sql
-                });
+                res.render("admin", {upSuccess: false, "pets": petsData})
+              } else {
+                console.log("Update execution: ", rows, fields);
+                res.render("admin", {upSuccess: true, "pets": petsData});
+              }
             });//query
         });//connect
     });//promise
@@ -185,11 +213,13 @@ app.post("/insertRecord", isAuthenticated, function (req, res) {
             if (err) throw err;
             conn.query(sql, sqlParams, function (err, rows, fields) {
                 if (err) throw err;
-                console.dir(rows);
-                console.log("Insert execution: ", rows, fields);
-                res.render("admin", {
-                    sql: sql, insertSuccess: true
-                });
+                else if (rows.affectedRows == 0) {
+                  res.render("admin", {"pets": petsData, insertSuccess: false})
+                } else {
+                  res.render("admin", {
+                    sql: sql, insertSuccess: true, "pets": petsData
+                  });
+                }
             });//query
         });//connect
     });//promise
@@ -208,11 +238,11 @@ app.post("/deleteRecord", isAuthenticated, function (req, res) {
             conn.query(sql, [petName], function (err, rows, fields) {
                 if (err) { throw err }
                 else if (rows.affectedRows == 0) {
-                  res.render("admin", {delSuccess: false})
+                  res.render("admin", {delSuccess: false, "pets": petsData})
                 } else {
                   console.log("Delete execution: ", rows, fields);
                   res.render("admin", {
-                    sql: sql, delSuccess: true
+                    sql: sql, delSuccess: true, "pets": petsData
                   });
                 }
             });//query
@@ -300,11 +330,24 @@ function checkUsername(username){
 // Create a connection to the database server
 function createDBConnection() {
     var conn = mysql.createPool({
-        connectionLimit: 10,
+        connectionLimit: 7,
         host: "us-cdbr-iron-east-02.cleardb.net",
         user: "b966e7405b082e",
         password: "e739afd6",
         database: "heroku_d27a5db666d1cf0"
+    });
+    return conn;
+}
+
+// Create a multi query connection to the database server
+function createDBConnectionMultiple() {
+    var conn = mysql.createPool({
+        connectionLimit: 2,
+        host: "us-cdbr-iron-east-02.cleardb.net",
+        user: "b966e7405b082e",
+        password: "e739afd6",
+        database: "heroku_d27a5db666d1cf0",
+        multipleStatements: true
     });
     return conn;
 }

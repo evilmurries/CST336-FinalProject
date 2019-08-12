@@ -3,7 +3,7 @@
 <h1>Admin Functions:</h1>
         
         <form method="POST" action="/logout">
-          <input type="submit" value="Logoout">
+          <input type="submit" value="Logout">
         </form>
 
 
@@ -15,13 +15,29 @@
         </form>
     
         <form method="post" action="/updateTable">
-          Pet name: <input type="text" style="width: 75px" name="pet_name">
-          Animal type: <input type="text" style="width: 75px" name="animal_type">
-          Adoption fee: <input type="text" style="width: 75px" name="adoption_fee">
-          Location: <input type="text" style="width: 75px" name="location">
+          Pet names: <select id="petNames" name="pet_name">
+            <% for(var i = 0; i < pets[0].length; i++) { %>
+              <option class="updateOption"><%= pets[0][i].pet_name %></option>
+            <% } %>
+          </select>
+          Animal type: <select type="text" style="width: 75px" name="animal_type">
+            <% for(var i = 0; i < pets[1].length; i++) { %>
+              <option class="updateOption"><%= pets[1][i].id %> <%= pets[1][i].animal %></option>
+            <% } %>
+          </select>
+          Adoption fee: <select type="text" style="width: 75px" name="adoption_fee">
+            <% for(var i = 0; i < pets[2].length; i++) { %>
+              <option class="updateOption"><%= pets[2][i].adoption_fee %></option>
+            <% } %>
+          </select>
+          Location: <select type="text" style="width: 75px" name="location">
+            <% for(var i = 0; i < pets[3].length; i++) { %>
+              <option class="updateOption"><%= pets[3][i].location %></option>
+            <% } %>
+          </select>
           Image URL: <input type="text" style="width: 75px" name="imageURL">
           Description: <input type="text" style="width: 75px" name="description">
-            <button data-onclick="$.get('/updateTable', function(data){ console.log(data) });">Update Table</button>
+            <button data-onclick="$.get('/updateTable', function(data){ console.log(data) });">Update Pet Table</button>
         </form>
    
         <form method="post" action="/deleteRecord">

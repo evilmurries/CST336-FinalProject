@@ -40,3 +40,5 @@ $("#cartContainer").on("click", function() {
   $("#cartContainer").html("");
   $("#cartContainer").append('<i class="fas fa-shopping-cart"></i>');
 });
+
+
