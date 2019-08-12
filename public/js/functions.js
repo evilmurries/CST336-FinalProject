@@ -6,7 +6,25 @@ $(document).ready(function() {
 
   //$(".button").on("click", function() {
     
+  $("#animals").on("change", function() {
+    $.ajax({
+      method: "get",
+      url: "/api/getPrice",
+      data: {
+        "animal_type": $("#animals").val(),
+      },
+      success: function(result, status) {
+        //$("#price").html("<select>");
+        $("#price").html("<option>Select One</option>")
+        for (let i = 0; i < result.length; i++) {
+          $("#price").append("<option>" + result[i].adoption_fee + "</option>");
+        }
+        // $("#price").html("</select>");
+      }
+    }) //ajax
+  }); //select pets
   
+
   
    $(".petLink").on("click", function() {
     $.ajax({
@@ -27,6 +45,8 @@ $(document).ready(function() {
     }) //ajax
   }); //petLink
   //});
+  
+  
 }) //ready document
 
 // Action Listener for when the shopping cart is clicked on

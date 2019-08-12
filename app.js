@@ -80,7 +80,20 @@ app.get("/api/getimage", function(req, res) {
     console.log(result);
     res.send(result);
   }); //query
-});
+});//display Pet Images based on animal type
+
+//API to get pet price
+app.get("/api/getPrice", function(req,res){
+  var conn = createDBConnection();
+  let sql = "SELECT adoption_fee, location FROM pets WHERE animal_type = ?";
+  var sqlParams = req.query.animal_type;
+  conn.query(sql, sqlParams, function(err, result) {
+    if (err) throw err;
+    console.log(result);
+    res.send(result);
+  }); //query
+  
+});//display pet prices select
 
 // API for requesting all the pet names
 app.get("/api/petNames", function(req, res) {
