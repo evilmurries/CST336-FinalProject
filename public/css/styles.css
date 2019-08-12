@@ -62,11 +62,6 @@ li a {
   cursor: pointer;
 }
 
-img.avatar {
-  width: 10%;
-  border-radius: 50%;
-}
-
 .container {
   padding: 16px;
 }
@@ -79,16 +74,6 @@ input[type=text], input[type=password] {
   display: inline-block;
   border: 5px solid #ccc;
   box-sizing: border-box;
-}
-.admin-button{
-  background-color:#335763 ;
-  color: orange;
-  padding: 10px 25px;
-  text-align: center;
-  display: inline-block;
-  font-size: 16px;
-  margin: 6px 2px;
-  cursor: pointer;
 }
 
 i {
