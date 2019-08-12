@@ -2,10 +2,18 @@
 
     <main>       
          
+       <form method="GET" action="/">
+          <input type="submit" value="Home">
+        </form>
+      
+      <form method="GET" action="/login">
+          <input type="submit" value="Login">
+        </form> 
+      
       <p>Here is our amazing list of animals that we have at Golden State Adoption, we have added a description of each animal so you can get to know them.</p> 
       
       
-      <select>
+      <select class = animals>
         <option value="dog">Dog</option>
         <option value="cat">Cat</option>
          <option value="horse">Horse</option>
@@ -16,7 +24,7 @@
         </div>
       </select>
      
-      <select>
+      <select class = "price">
         <option value="25" >25.00</option>
         <option value="50">50.00</option>
         <option value="75">75.00</option>
@@ -27,7 +35,7 @@
         </div>
       </select>
 
-     <select>
+     <select class = "cities">
         <option value="Union-City" >Union City</option>
         <option value="Santa Clara">Santa Clara</option>
         <option value="Los-Angelas">Los Angelas</option>

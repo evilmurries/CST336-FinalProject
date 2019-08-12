@@ -19,13 +19,17 @@
   </div>
      </div>      
    
-    <form <li><a href="/adopt">
-  <button class="button" id="submitButton" type="button">Adopt</button>
-    </form>
       
-    <form <li> <a href="/login">
-            <button class="admin-button" id="adbutton" type="button">Admin</button>
-    </form>
+      <form method="GET" action="/adopt">
+          <input type="submit" value="Adopt">
+        </form> 
+      
+      
+      <form method="GET" action="/login">
+          <input type="submit" value="Login">
+        </form> 
+      
+    
     </main>
     
 <% include partials/footer.ejs %>
