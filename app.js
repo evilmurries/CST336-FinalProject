@@ -114,18 +114,20 @@ app.post("/admin", async function(req, res) {
   
   let passwordMatch = await checkPassword(password, dbPassword)
   
-  if (passwordMatch){
+  if (passwordMatch) {
     console.log("passwordMatch detected");
     req.session.authenticated = true;
     
-    let conn = await createDBConnectionMultiple();
-    let sql = "SELECT pet_name FROM pets; SELECT id, animal FROM animals; SELECT DISTINCT adoption_fee  FROM pets ORDER BY adoption_fee; SELECT DISTINCT location FROM pets;"
+    var promise = new Promise( function(resolve, reject) {
+    let conn = createDBConnectionMultiple();
+    let sql = "SELECT pet_name FROM pets; SELECT id, animal FROM animals; SELECT DISTINCT adoption_fee  FROM pets ORDER BY adoption_fee; SELECT DISTINCT location FROM pets;";
   
     conn.query(sql, function(err, pet_result) {
       if (err) throw err;
       petsData = pet_result;
       res.render("admin", {"pets": petsData});
-    })  
+      }); // Query  
+      }); // Promise
   } else {
     console.log("passwordMatch NOT detected");
     req.session.authenticated = false;
