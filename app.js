@@ -342,6 +342,35 @@ function checkUsername(username){
   });//promise
 }
 
+//route to insert a new pet into the database, user must fill in all fields 
+app.post("/insertPet", isAuthenticated, function (req, res) {
+  //console.log("animalType is: " + req.body.animal_type.charAt[1]);  
+  var petName = req.body.pet_name;
+    //var animalType  = req.body.animal_type;
+  var animalType = parseInt(req.body.animal_type);
+    var adoptionFee = req.body.adoption_fee;
+    var physicalLocation = req.body.location;
+    var imageurl = req.body.imageURL;
+    var desc = req.body.description;
+    var sql = "INSERT INTO pets(pet_name, animal_type, adoption_fee, location, image, description) VALUES(?,?,?,?,?,?)";
+
+        let conn = createDBConnection();
+        conn.getConnection(function (err) {
+            if (err) throw err;
+            conn.query(sql, [petName, animalType, adoptionFee, physicalLocation, imageurl, desc
+                            ], function (err, rows, fields) {
+                if (err) throw err;
+                console.log("Insert execution: ", rows, fields);
+                //res.render("admin", {sql: sql});
+              res.render("admin", {"pets": petsData});
+            });//query
+        });//connect
+    
+
+});
+
+
+
 // Create a connection to the database server
 function createDBConnection() {
     var conn = mysql.createPool({
