@@ -85,7 +85,7 @@ app.get("/api/getimage", function(req, res) {
 //API to get pet price
 app.get("/api/getPrice", function(req,res){
   var conn = createDBConnection();
-  let sql = "SELECT adoption_fee, location FROM pets WHERE animal_type = ?";
+  let sql = "SELECT adoption_fee FROM pets WHERE animal_type = ?";
   var sqlParams = req.query.animal_type;
   conn.query(sql, sqlParams, function(err, result) {
     if (err) throw err;
@@ -94,6 +94,25 @@ app.get("/api/getPrice", function(req,res){
   }); //query
   
 });//display pet prices select
+
+
+
+//API to get pet location
+app.get("/api/getLocation", function(req, res) {
+  var conn = createDBConnection();
+  let sql = "SELECT location FROM pets WHERE animal_type = ?";
+  var sqlParams = req.query.animal_type; 
+  //var sqlParams = req.query.pet_name;
+  conn.query(sql, sqlParams, function(err, result) {
+    if (err) throw err;
+    console.log(result);
+    res.send(result);
+  }); //query
+});//display pet location
+
+
+
+
 
 // API for requesting all the pet names
 app.get("/api/petNames", function(req, res) {

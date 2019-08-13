@@ -3,6 +3,28 @@
 
 $(document).ready(function() {
 
+  
+  
+    //test for location
+    $("#animals").on("change", function() {
+    $.ajax({
+      method: "get",
+      url: "/api/getLocation",
+      data: {
+        "animal_type": $("#animals").val(),
+      },
+      success: function(result, status) {
+        //$("#price").html("<select>");
+        $("#location").html("<option>Select One</option>")
+        for (let i = 0; i < result.length; i++) {
+          $("#location").append("<option>" + result[i].location + "</option>");
+        }
+        // $("#price").html("</select>");
+      }
+    }) //ajax
+  }); //select pets
+  
+  
 
   //$(".button").on("click", function() {
     
@@ -23,6 +45,10 @@ $(document).ready(function() {
       }
     }) //ajax
   }); //select pets
+  
+
+   
+  
   
 
   
