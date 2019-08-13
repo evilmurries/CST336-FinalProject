@@ -46,8 +46,26 @@ $(document).ready(function() {
   }); //petLink
   //});
   
-  
-}) //ready document
+       //Action listener for adpot search button
+  $("#search").click(function() {
+    $.ajax({
+        method: "get",
+        url: "/adoptSearch",
+        success: function(rows, status){
+          //console.log("Adopt search was carried out successfully. ");
+          for(i=0;i<rows.length;i++)
+            {
+              $("#animalResult").append(rows[i].pet_name + "<br>");
+            }
+        },//success  
+        error: function(err, status) {
+          console.log(err);
+        }
+      });//ajax
+  });
+
+
+  }) //ready document
 
 // Action Listener for when the shopping cart is clicked on
 $("#cartContainer").on("click", function() {

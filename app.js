@@ -369,6 +369,23 @@ app.post("/insertPet", isAuthenticated, function (req, res) {
 
 });
 
+//route to search for a pet to adopt
+app.get("/adoptSearch", isAuthenticated, function (req, res) {
+  var animalType = parseInt(req.body.animal_type);
+  //var adoptionFee = req.body.adoption_fee;
+  var physicalLocation = req.body.location;
+  var sql = "SELECT * FROM pets WHERE animal_type = '?' AND location = '?'"//"INSERT INTO pets(pet_name, animal_type, adoption_fee, location, image, description) VALUES(?,?,?,?,?,?)";
+
+        let conn = createDBConnection();
+        conn.connect(function (err) {
+            if (err) throw err;
+            conn.query(sql, animalType, physicalLocation, function (err, rows, fields) {
+                if (err) throw err;
+              //res.render("admin", {"pets": petsData});
+              res.send(rows);
+            });//query
+        });//connect
+});
 
 
 // Create a connection to the database server
