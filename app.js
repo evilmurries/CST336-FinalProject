@@ -51,9 +51,11 @@ app.get("/clearSession", function(req, res) {
 
 app.get("/checkout", function(req, res) {
   if(!req.session.pets) {
+    res.ression.destroy();
     res.redirect("/adopt");
-  }
+  } else {
   res.redirect("/");
+  }
 }) // checkout
 
 app.get("/confirmation", function(req, res) {

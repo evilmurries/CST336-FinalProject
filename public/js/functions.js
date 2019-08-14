@@ -131,6 +131,7 @@ $(document).ready(function() {
       }
     });//ajax
 });
+  
 
   //button to display cart/session variable contents
   $("#showCart").click(function() {
