@@ -141,7 +141,11 @@ app.get("/api/petNames", function(req, res) {
   }) // Query
 }); // API route
         
-     
+// Clear Cart and returns to homepage
+app.get("/clearSession", function (req, res) {
+  req.session.destroy();
+  res.redirect("/");
+}); // Clears Cart
 
 
 // POST routes
