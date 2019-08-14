@@ -56,12 +56,27 @@
       </select>
       
 
-      <button id="search" type='button'>Search</button>
+      <button id="addToCart" type='button'>Add To Cart</button>
       
       
       <div id="animalResult">
 
     </div>
+
+      <form method="get" id="checkout" action="/checkout">
+        <button id="checkout" type="button">
+          Checkout
+        </button>
+      </form>
+       <form id="cart">
+      <button id="showCart" type='button'>Show Cart Contents</button>
+      </form>
+       
+     
+     
+    <div id="cartContainer">
+    </div>
+
    <form action='/clearSession'>
       <button>
       Clear Cart

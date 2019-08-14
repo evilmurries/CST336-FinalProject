@@ -83,7 +83,7 @@ $(document).ready(function() {
   //});
   
   //Action listener for adopt search button
-  $("#search").click(function() {
+  $("#addToCart").click(function() {
     let animal = $("#animals").val();
     
     var petType = $("#animals").val();
@@ -111,20 +111,48 @@ $(document).ready(function() {
         }
       });//ajax
   });
+  
 
+ //save the pet name in a session variable when adopt button is clicked
+  $(document).on("click", ".adoptButton", function(){
+    var petName = $(this).attr("value");
+     
+    $.ajax({
+      method: "get",
+      url: "/storeInfo",
+      data: {
+            "pet_name" : petName,
+            },
+      success: function(rows, status){
+       
+      },//success  
+      error: function(err, status) {
+        console.log(err);
+      }
+    });//ajax
+});
+
+  //button to display cart/session variable contents
+  $("#showCart").click(function() {
+    $.ajax({
+   
+      method: "get",
+      url: "/retrieveInfo",
+      success: function(result, status){
+        $("#cartContainer").html("")
+        for(i=0;i<result.pets.length;i++)
+          {
+            $("#cartContainer").append(result.pets[i]);
+            $("#cartContainer").append(" ");
+          }
+       
+      },//success  
+      error: function(err, status) {
+        console.log(err);
+      }
+    });//ajax
+    });
 
   }) //ready document
-
-// Action Listener for when the shopping cart is clicked on
-$("#cartContainer").on("click", function() {
-  $("#cartContainer").html("");
-  $("#cartContainer").append('<i class="fas fa-cart-arrow-down"></i>');
-});
-
-// Action listener for when an already clicked cart is clicked
-$("#cartContainer").on("click", function() {
-  $("#cartContainer").html("");
-  $("#cartContainer").append('<i class="fas fa-shopping-cart"></i>');
-});
 
 

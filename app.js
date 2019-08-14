@@ -44,6 +44,23 @@ app.get("/adopt", function(req, res) {
     }); // query
 });// populates page of mysql images
 
+app.get("/clearSession", function(req, res) {
+  req.session.destroy();
+  res.redirect("/adopt");
+})// Route
+
+app.get("/checkout", function(req, res) {
+  if(!req.session.pets) {
+    res.redirect("/adopt");
+  }
+  res.redirect("/");
+}) // checkout
+
+app.get("/confirmation", function(req, res) {
+  
+  
+}) //confirmation
+
 
 //store the info in a session array variable
 app.get("/api/storeInfo", async function(req,res) {
@@ -55,7 +72,7 @@ app.get("/api/storeInfo", async function(req,res) {
     req.session.pets = [];
   }
  
-  var sql = "SELECT * FROM pets WHERE location = ? AND adoption_fee = ? AND animal_type = ?";
+  var sql = "SELECT pet_name FROM pets WHERE location = ? AND adoption_fee = ? AND animal_type = ?";
   var sqlParams = [location, price, animalType];
   
   console.log(sqlParams);
@@ -65,8 +82,8 @@ app.get("/api/storeInfo", async function(req,res) {
         conn.getConnection(function (err) {
             if (err) throw err;
             conn.query(sql, sqlParams, function (err, rows, fields) {
-             	 console.log("rows " + rows);
-               req.session.pets = rows.pet_name;
+             	 console.log("pet_name " + rows.pet_name);
+               req.session.pets.push(rows[0].pet_name);
     					 res.render("adopt");
             });//query
         });//connect
@@ -141,11 +158,13 @@ app.get("/api/petNames", function(req, res) {
   }) // Query
 }); // API route
         
-// Clear Cart and returns to homepage
-app.get("/clearSession", function (req, res) {
-  req.session.destroy();
-  res.redirect("/");
-}); // Clears Cart
+
+//get the info from the session variable
+app.get("/retrieveInfo",function(req,res){
+  res.send(req.session);
+});
+
+
 
 
 // POST routes
