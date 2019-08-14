@@ -66,28 +66,38 @@ app.get("/purchase", async function(req,res){
 });//app Get
 
 app.get("/checkout", function(req, res) {
-  if(!req.session.pets) {
-    res.render("checkout", {"emptyCart": true});
+  if (!req.session.pets) {
+    res.render("checkout", {
+      "emptyCart": true
+    });
   } else {
-    
+
     var data = [];
     var total = 0;
-    
+
+    let conn = createDBConnection();
+    //for (var i = 0; i < req.session.pets.length; i++) {
+    // console.log(req.session.pets[i])
+    var sql = "SELECT * FROM pets WHERE pet_name = ?"
+    //var sqlParams = [req.session.pets[i]];
+    // let conn = createDBConnection();
+    conn.getConnection(function(err) {
       for (var i = 0; i < req.session.pets.length; i++) {
         console.log(req.session.pets[i])
-        var sql = "SELECT * FROM pets WHERE pet_name = ?"
         var sqlParams = [req.session.pets[i]];
-        let conn = createDBConnection();
-        conn.getConnection(function (err) {
-            if (err) throw err;
-            conn.query(sql, sqlParams, function (err, rows, fields) {
-             	 data.push(rows);
-              console.log(Number(rows.adoption_fee));
-              total += Number(rows.adoption_fee);
-              res.render("checkout", {"data": data, "emptyCart": false, "total": total});
-            });//query
-        });//connect
-}  
+        if (err) throw err;
+        conn.query(sql, sqlParams, function(err, rows, fields) {
+          data.push(rows);
+          console.log(Number(rows.adoption_fee));
+          total += Number(rows.adoption_fee);
+          res.render("checkout", {
+            "data": data,
+            "emptyCart": false,
+            "total": total
+          });
+        }); //query
+      } //connect
+    });
   }
 }) // checkout
 
