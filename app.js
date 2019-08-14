@@ -55,8 +55,10 @@ app.get("/checkout", function(req, res) {
   } else {
     
     var data = [];
+    var total = 0;
     
       for (var i = 0; i < req.session.pets.length; i++) {
+        console.log(req.session.pets[i])
         var sql = "SELECT * FROM pets WHERE pet_name = ?"
         var sqlParams = [req.session.pets[i]];
         var promise = new Promise(function (resolve, reject) {
@@ -65,14 +67,14 @@ app.get("/checkout", function(req, res) {
             if (err) throw err;
             conn.query(sql, sqlParams, function (err, rows, fields) {
              	 data.push(rows);
+              console.log(rows.adoption_fee);
+              total += Number(rows.adoption_fee);
             });//query
         });//connect
     });//promise
-        res.render("checkout", {"data": data});
-}
-
-    
-  res.render("checkout", {"data": req.session, "emptyCart": false});
+}  
+    console.log(data);
+  res.render("checkout", {"data": data, "emptyCart": false, "total": total});
   }
 }) // checkout
 
