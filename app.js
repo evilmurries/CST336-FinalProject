@@ -183,7 +183,9 @@ app.get("/retrieveInfo",function(req,res){
   res.send(req.session);
 });
 
-
+app.get("/login", function(req, res) {
+  res.render("login");
+}); //login page
 
 
 // POST routes
