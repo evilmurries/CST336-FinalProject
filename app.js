@@ -84,7 +84,7 @@ app.get("/checkout", function(req, res) {
     conn.getConnection(function(err) {
       for (var i = 0; i < req.session.pets.length; i++) {
         console.log(req.session.pets[i])
-        var sqlParams = [req.session.pets[i]];
+        var sqlParams = req.session.pets[i];
         if (err) throw err;
         conn.query(sql, sqlParams, function(err, rows, fields) {
           data.push(rows);
