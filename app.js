@@ -47,28 +47,25 @@ app.get("/adopt", function(req, res) {
 
 //store the info in a session array variable
 app.get("/api/storeInfo", async function(req,res) {
-	var location = req.body.location;
-  var price = Number(req.body.price);
-  var animalType = req.body.petType;
-  
-//   console.log("location = " + req.body.location);
-//   console.log("Animal = " + req.body.petType);
-//   console.log("Price = " + req.body.price);
-  
-  
+	var location = req.query.location;
+  var price = Number(req.query.price);
+  var animalType = req.query.petType;
+
   if (!req.session.pets) {
     req.session.pets = [];
   }
  
-  var sql = "SELECT * FROM pets WHERE location = ?, adoption_fee = ? AND animal_type = ?";
+  var sql = "SELECT * FROM pets WHERE location = ? AND adoption_fee = ? AND animal_type = ?";
   var sqlParams = [location, price, animalType];
+  
+  console.log(sqlParams);
   
    var promise = new Promise(function (resolve, reject) {
         let conn = createDBConnection();
         conn.getConnection(function (err) {
             if (err) throw err;
             conn.query(sql, sqlParams, function (err, rows, fields) {
-             	 console.log(rows);
+             	 console.log("rows " + rows);
                req.session.pets = rows.pet_name;
     					 res.render("adopt");
             });//query
