@@ -51,10 +51,28 @@ app.get("/clearSession", function(req, res) {
 
 app.get("/checkout", function(req, res) {
   if(!req.session.pets) {
-    res.ression.destroy();
-    res.redirect("/adopt");
+    res.render("checkout", {"emptyCart": true});
   } else {
-  res.redirect("/");
+    
+    var data = [];
+    
+      for (var i = 0; i < req.session.pets.length; i++) {
+        var sql = "SELECT * FROM pets WHERE pet_name = ?"
+        var sqlParams = [req.session.pets[i]];
+        var promise = new Promise(function (resolve, reject) {
+        let conn = createDBConnection();
+        conn.getConnection(function (err) {
+            if (err) throw err;
+            conn.query(sql, sqlParams, function (err, rows, fields) {
+             	 data.push(rows);
+            });//query
+        });//connect
+    });//promise
+        res.render("checkout", {"data": data});
+}
+
+    
+  res.render("checkout", {"data": req.session, "emptyCart": false});
   }
 }) // checkout
 

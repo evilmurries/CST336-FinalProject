@@ -1,0 +1,24 @@
+<% include partials/header.ejs %>
+
+ <form method="get" action="/clearSession">
+        <input type="submit" class="button" value="Cancel">
+      </form>
+
+ <% if(typeof emptyCart != "undefined" && emptyCart) { %>
+              <p>
+              Your Cart is Empty. Please Hit Cancel
+              </p>
+            <% } %>
+
+
+ <% if(typeof emptyCart != "undefined" && !emptyCart) { %>
+
+   <form method="get" action="/checkout">
+        <input type="submit" class="button" value="Checkout">
+      </form>
+
+
+            <% } %>
+
+
+<% include partials/footer.ejs %>
