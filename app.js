@@ -44,25 +44,36 @@ app.get("/adopt", function(req, res) {
     }); // query
 });// populates page of mysql images
 
-app.get("/api/adoptSearch", function(req, res) {
 
-  console.log("location = " + req.body.location);
-  console.log("Animal = " + req.body.animal);
-  console.log("Price = " + req.body.price);
-  res.redirect("/adopt");
-});
-
-app.get("/login", function(req, res) {
-  res.render("login");
-}); //login page
-
-app.get("/logout", function(req, res) {
-  req.session.destroy();
-  res.redirect("/");
-}); //logout
-
-app.get("/myAccount",isAuthenticated, function(req,res) {
-  res.render("account");
+//store the info in a session array variable
+app.get("/api/storeInfo", async function(req,res) {
+	var location = req.body.location;
+  var price = Number(req.body.price);
+  var animalType = req.body.petType;
+  
+//   console.log("location = " + req.body.location);
+//   console.log("Animal = " + req.body.petType);
+//   console.log("Price = " + req.body.price);
+  
+  
+  if (!req.session.pets) {
+    req.session.pets = [];
+  }
+ 
+  var sql = "SELECT * FROM pets WHERE location = ?, adoption_fee = ? AND animal_type = ?";
+  var sqlParams = [location, price, animalType];
+  
+   var promise = new Promise(function (resolve, reject) {
+        let conn = createDBConnection();
+        conn.getConnection(function (err) {
+            if (err) throw err;
+            conn.query(sql, sqlParams, function (err, rows, fields) {
+             	 console.log(rows);
+               req.session.pets = rows.pet_name;
+    					 res.render("adopt");
+            });//query
+        });//connect
+    });//promise
 });
 
 
@@ -107,8 +118,8 @@ app.get("/api/getPrice", function(req,res){
 //API to get pet location
 app.get("/api/getLocation", function(req, res) {
   var conn = createDBConnection();
-  let sql = "SELECT location FROM pets WHERE animal_type = ?";
-  var sqlParams = req.query.animal_type; 
+  let sql = "SELECT location FROM pets WHERE animal_type = ? AND adoption_fee = ?;";
+  var sqlParams = [req.query.animal_type, Number(req.query.price)]; 
   //var sqlParams = req.query.pet_name;
   conn.query(sql, sqlParams, function(err, result) {
     if (err) throw err;

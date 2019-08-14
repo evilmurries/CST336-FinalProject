@@ -3,8 +3,7 @@
 
 $(document).ready(function() {
 
-  
-  
+  /*
     //test for location
     $("#animals").on("change", function() {
     $.ajax({
@@ -22,7 +21,7 @@ $(document).ready(function() {
         // $("#price").html("</select>");
       }
     }) //ajax
-  }); //select pets
+  }); //select pets */
   
   //$(".button").on("click", function() {
     
@@ -38,6 +37,25 @@ $(document).ready(function() {
         $("#price").html("<option>Select One</option>")
         for (let i = 0; i < result.length; i++) {
           $("#price").append("<option>" + result[i].adoption_fee + "</option>");
+        }
+        // $("#price").html("</select>");
+      }
+    }) //ajax
+  }); //select pets
+  
+    $("#price").on("change", function() {
+    $.ajax({
+      method: "get",
+      url: "/api/getLocation",
+      data: {
+        "animal_type": $("#animals").val(),
+        "price": $("#price").val()
+      },
+      success: function(result, status) {
+        //$("#price").html("<select>");
+        $("#location").html("<option>Select One</option>")
+        for (let i = 0; i < result.length; i++) {
+          $("#location").append("<option>" + result[i].location + "</option>");
         }
         // $("#price").html("</select>");
       }
@@ -64,14 +82,13 @@ $(document).ready(function() {
   }); //petLink
   //});
   
-  //Action listener for adpot search button
+  //Action listener for adopt search button
   $("#search").click(function() {
     let animal = $("#animals").val();
     
-    console.log(animal);
-    var petType = "animal";
-    var location = "location";
-    var price = "price";
+    var petType = $("#animals").val();
+    var location = $("#location").val();
+    var price = $("#price").val();
     
     console.log("animal " + petType);
     console.log("location " + location);
@@ -81,7 +98,7 @@ $(document).ready(function() {
         method: "get",
         dataType: "json",
         data: {"petType": petType, "location": location, "price": price},
-        url: "api/adoptSearch",
+        url: "api/storeInfo",
         success: function(rows, status){
           //console.log("Adopt search was carried out successfully. ");
           for(i=0;i<rows.length;i++)
