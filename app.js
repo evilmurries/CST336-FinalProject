@@ -61,20 +61,17 @@ app.get("/checkout", function(req, res) {
         console.log(req.session.pets[i])
         var sql = "SELECT * FROM pets WHERE pet_name = ?"
         var sqlParams = [req.session.pets[i]];
-        var promise = new Promise(function (resolve, reject) {
         let conn = createDBConnection();
         conn.getConnection(function (err) {
             if (err) throw err;
             conn.query(sql, sqlParams, function (err, rows, fields) {
              	 data.push(rows);
-              console.log(rows.adoption_fee);
+              console.log(Number(rows.adoption_fee));
               total += Number(rows.adoption_fee);
+              res.render("checkout", {"data": data, "emptyCart": false, "total": total});
             });//query
         });//connect
-    });//promise
 }  
-    console.log(data);
-  res.render("checkout", {"data": data, "emptyCart": false, "total": total});
   }
 }) // checkout
 
