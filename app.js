@@ -53,7 +53,7 @@ app.get("/purchase", async function(req,res){
   let conn = createDBConnection();
   
   
-  let sql = "SELECT p.*, b.animal from pets p, animals b WHERE b.id = p.animal_type;"
+  let sql = "SELECT p.*, b.animal from adopted_pets p, animals b WHERE b.id = p.animal_type;"
   let sqlParams = req.query.animal_type;
   conn.query(sql, function(err,results,field) {
     if (err) throw (err);
