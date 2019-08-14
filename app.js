@@ -91,7 +91,7 @@ app.get("/checkout", function(req, res) {
           console.log(Number(rows.adoption_fee));
           total += Number(rows.adoption_fee);
           res.render("checkout", {
-            "data": data,
+            "data": rows,
             "emptyCart": false,
             "total": total
           });
