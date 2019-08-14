@@ -1,0 +1,24 @@
+<% include partials/header.ejs %>
+<!--Animals and Total Cost-->
+
+<table>
+  <tr>
+    <th>Pet Name</th>
+    <th>Animal Type</th> 
+    <th>Price</th>
+    <th>description</th>
+  </tr>
+  <% rows.forEach(function(row) { %>
+      <tr>
+      <th><%= row['pet_name'] %></th>
+      <th><%= row['animal'] %></th>
+      <th><%= row['animal_type'] %></th>
+      <th><%= row['adoption_fee'] %></th>
+      <td><%= row['description'] %></td> 
+      <img id='image' src='" + <%=row['image']%> + "' width='200' height='200'/>
+      </tr>
+  <% }) %>
+</table>
+
+
+<% include partials/footer.ejs %>

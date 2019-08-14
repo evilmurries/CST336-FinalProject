@@ -49,6 +49,22 @@ app.get("/clearSession", function(req, res) {
   res.redirect("/adopt");
 })// Route
 
+app.get("/purchase", async function(req,res){
+  let conn = createDBConnection();
+  
+  
+  let sql = "SELECT p.*, b.animal from pets p, animals b WHERE b.id = p.animal_type;"
+  let sqlParams = req.query.animal_type;
+  conn.query(sql, function(err,results,field) {
+    if (err) throw (err);
+    let col = [];
+    field.forEach(function(row){
+      col.push(row.pet_name);
+    })//for each
+    res.render("purchase", {"rows": results, "col": col});
+  });//query
+});//app Get
+
 app.get("/checkout", function(req, res) {
   if(!req.session.pets) {
     res.render("checkout", {"emptyCart": true});
