@@ -29,7 +29,6 @@ app.get("/", function(req, res) {
 }); // Main Route
 
 app.get("/adopt", function(req, res) {
-
   var conn = createDBConnection();
   let sql = "SELECT DISTINCT animal_type FROM pets ORDER BY animal_type";
   //let sql = "SELECT animal from animals inner join pets on animals.id = pets.id";
@@ -44,6 +43,14 @@ app.get("/adopt", function(req, res) {
     //console.log(image);
     }); // query
 });// populates page of mysql images
+
+app.get("/api/adoptSearch", function(req, res) {
+
+  console.log("location = " + req.body.location);
+  console.log("Animal = " + req.body.animal);
+  console.log("Price = " + req.body.price);
+  res.redirect("/adopt");
+});
 
 app.get("/login", function(req, res) {
   res.render("login");

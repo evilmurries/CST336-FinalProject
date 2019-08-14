@@ -24,8 +24,6 @@ $(document).ready(function() {
     }) //ajax
   }); //select pets
   
-  
-
   //$(".button").on("click", function() {
     
   $("#animals").on("change", function() {
@@ -45,12 +43,6 @@ $(document).ready(function() {
       }
     }) //ajax
   }); //select pets
-  
-
-   
-  
-  
-
   
    $(".petLink").on("click", function() {
     $.ajax({
@@ -72,11 +64,24 @@ $(document).ready(function() {
   }); //petLink
   //});
   
-       //Action listener for adpot search button
+  //Action listener for adpot search button
   $("#search").click(function() {
+    let animal = $("#animals").val();
+    
+    console.log(animal);
+    var petType = "animal";
+    var location = "location";
+    var price = "price";
+    
+    console.log("animal " + petType);
+    console.log("location " + location);
+    console.log("price " + price);
+    
     $.ajax({
         method: "get",
-        url: "/adoptSearch",
+        dataType: "json",
+        data: {"petType": petType, "location": location, "price": price},
+        url: "api/adoptSearch",
         success: function(rows, status){
           //console.log("Adopt search was carried out successfully. ");
           for(i=0;i<rows.length;i++)
