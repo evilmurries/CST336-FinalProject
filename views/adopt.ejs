@@ -12,42 +12,75 @@
       
       <p>Here is our amazing list of animals that we have at Golden State Adoption, we have added a description of each animal so you can get to know them.</p> 
       
+      <select class ="animals" name ="animal" id="animals">
+        <option value="0">Select One</option>
+        <option value="1">Dog</option>
+        <option value="2">Cat</option>
+         <option value="3">Horse</option>
+        <option value="4">Guinea Pig</option>
+        <option value="5">Rabbit</option>
+        <option value="6">Alligator</option>
+        <option value="7">Otter</option>
+        </div>
+      </select>
+     <!--
+      <select class = "price">
+        <option value="25" >25.00</option>
+        <option value="50">50.00</option>
+        <option value="75">75.00</option>
+        <option value="100">100.00</option>
+        <option value="200">200.00</option>
+        <option value="5000">5000.00</option>
+         <option value="9001">9001.00</option>
+        </div>
+      </select>
+      -->
+      <select class ="price" id="price" name="price">
+        
+         </select>
+     <select class ="location" id="location" name="location">
+       <!-->
+        <option value="Union-City" >Union City</option>
+        <option value="Santa Clara">Santa Clara</option>
+        <option value="Los-Angelas">Los Angelas</option>
+        <option value="Oakland">Oakland</option>
+        <option value="Santa-Clara">Santa Clara</option>
+        <option value="San-Jose">San Jose</option>
+        <option value="Portland">Portland</option>
+        <option value="Menlo-Park">Menlo Park</option>
+        <option value="Atherton">Atherton</option>  
+       <option value="Orange-County">Orange County</option>
+       <option value="Monterey-Bay">Monterey Bay</option>
+        </div>
+        -->
+      </select>
       
-      <form id="adoptForm">
-        
-      <select id="animal" name="animal">
-                <option value=""></option>
-        </select>
-        
-      <select id="location" name="location">
-                <option value=""></option>
-        </select>
-        
-        <select id="price" name="price">
-                <option value=""></option>
-        </select>
-        
-        
-      <button id="search" class = "button" type='button'>Search</button>
-            
-      </form>
+      <br>
+      <button id="addToCart" class ="button" type='button'>Add To Cart</button>
+      
       
       <div id="animalResult">
-      
+
     </div>
-      
-      <form id="cart">
-       
-      <button id="showCart" class = "button" type='button'>Show Cart Contents</button>
-            
+
+      <form method="get" action="/checkout">
+        <input type="submit" class="button" value="Checkout">
       </form>
-        
-      
-      
+       <form id="cart">
+      <button id="showCart" class ="button" type='button'>Show Cart Contents</button>
+      </form>
+       
+     
+     
     <div id="cartContainer">
+    </div>
+
+   <form action='/clearSession'>
+      <button class ="button">
+      Clear Cart
+    </button>
+      </form>
     </div>
      
     </main>
-  
 <% include partials/footer.ejs %>
-
