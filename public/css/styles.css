@@ -79,3 +79,7 @@ input[type=text], input[type=password] {
 i {
   font-size: 1.3em;
 }
+
+.item-name{
+   padding: 16px;
+}

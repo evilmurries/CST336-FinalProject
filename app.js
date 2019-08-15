@@ -44,99 +44,30 @@ app.get("/adopt", function(req, res) {
     }); // query
 });// populates page of mysql images
 
-app.get("/clearSession", function(req, res) {
-  req.session.destroy();
-  res.redirect("/adopt");
-})// Route
-
-app.get("/purchase", async function(req,res){
-  let conn = createDBConnection();
-  
-  
-  let sql = "SELECT p.*, b.animal from adopted_pets p, animals b WHERE b.id = p.animal_type;"
-  let sqlParams = req.query.animal_type;
-  conn.query(sql, function(err,results,field) {
-    if (err) throw (err);
-    let col = [];
-    field.forEach(function(row){
-      col.push(row.pet_name);
-    })//for each
-    res.render("purchase", {"rows": results, "col": col});
-  });//query
-});//app Get
-
-app.get("/checkout", function(req, res) {
-  if (!req.session.pets) {
-    res.render("checkout", {
-      "emptyCart": true
-    });
-  } else {
-
-    var data = [];
-    var total = 0;
-
-    let conn = createDBConnection();
-    //for (var i = 0; i < req.session.pets.length; i++) {
-    // console.log(req.session.pets[i])
-    var sql = "SELECT * FROM pets WHERE pet_name = ?"
-    //var sqlParams = [req.session.pets[i]];
-    // let conn = createDBConnection();
-    conn.getConnection(function(err) {
-      for (var i = 0; i < req.session.pets.length; i++) {
-        console.log(req.session.pets[i])
-        var sqlParams = req.session.pets[i];
-        if (err) throw err;
-        conn.query(sql, sqlParams, function(err, rows, fields) {
-          data.push(rows);
-          console.log(Number(rows.adoption_fee));
-          total += Number(rows.adoption_fee);
-          res.render("checkout", {
-            "data": rows,
-            "emptyCart": false,
-            "total": total
-          });
-        }); //query
-      } //connect
-    });
-  }
-}) // checkout
-
-app.get("/confirmation", function(req, res) {
-  
-  
-}) //confirmation
-
-
 
 //store the info in a session array variable
-app.get("/storeInfo",function(req,res){
-  
-  if (!req.session.pets) {
-    req.session.pets = [];
+app.get("/api/addCart",function(req,res){
+  let price = Number(req.query.price)
+  if(req.session["cart"] == undefined){
+    req.session["cart"] = {
+      total: price,
+      items: [req.query]
+    }
+    
   }
-  req.session.pets.push(req.query.pet_name);
-  var string = "";
-  var total = 0;
+ else{
+   req.session.cart.total += price
+   req.session.cart.items.push(req.query)
+ } 
   
-  //establish cart total
-  //for each element in the session array, extract the adopotion cost, cast/turn it into an int value and add it to the total
-  for(i=0;i<req.session.pets.length;i++)
-  {
-    for(j=0;j<req.session.pets[i].length;j++)
-      {
-        if(req.session.pets[i].charAt(j) == "0" || req.session.pets[i].charAt(j) == "1" || req.session.pets[i].charAt(j) == "2" || req.session.pets[i].charAt(j) == "3" || req.session.pets[i].charAt(j) == "4" || req.session.pets[i].charAt(j) == "5" || req.session.pets[i].charAt(j) == "6"  || req.session.pets[i].charAt(j) == "7"  || req.session.pets[i].charAt(j) == "8" || req.session.pets[i].charAt(j) == "9" )
-          {
-            string += req.session.pets[i].charAt(j);
-            console.log("string value is: " + string)
-          }
-      }
-    total = total + Number(string);
-    string = "";
-  }
+  //TODO: fetch image and send it
   
-  req.session.cartTotal = total;
+ 
+  res.send({total: req.session.cart.total})
   
-  res.send("");
+  
+
+  
 });
 
 app.get("/displayPets", async function(req, res) {
@@ -480,11 +411,12 @@ app.post("/insertPet", isAuthenticated, function (req, res) {
 app.get("/adoptSearch", function (req, res) {
   var animalType = req.query.animal;
   var physicalLocation = req.query.location;
-  var sql = "SELECT * FROM pets WHERE animal_type = ? AND location = ?";
+  var price = req.query.adoption_fee;
+  var sql = "SELECT * FROM pets WHERE animal_type = ?";
   conn = createDBConnection();
   conn.getConnection(function(err){
      if(err) throw err;
-   conn.query(sql, [animalType, physicalLocation], function(err,results){
+   conn.query(sql, [animalType, physicalLocation, price], function(err,results){
         if(err) throw err;
      console.dir(results);
         res.send(results);
@@ -493,7 +425,17 @@ app.get("/adoptSearch", function (req, res) {
   
 });
 
+app.get("/checkout", function (req, res) { 
+  
+  for(let item of req.session.cart.items){
+    
+  }
 
+
+
+
+
+});
 
 
 // Create a connection to the database server
@@ -936,8 +878,8 @@ function createDBConnectionMultiple() {
 // });
 
 // //get pet types
-// app.get("/getPetTypes", function (req, res) {
-  
+app.get("/getPetTypes", function (req, res) {
+  //console.log(req)
 //   sql = "SELECT DISTINCT animal_type FROM pets";
 //   var conn = createDBConnection();
 //   conn.connect(function(err){
@@ -948,8 +890,8 @@ function createDBConnectionMultiple() {
 
 //             });//query
 //         });//connect
-// });
-
+});
+//comment out testing 
 // //get pet location
 // app.get("/getPetLocation", function (req, res) {
   
